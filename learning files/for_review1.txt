@@ -1,0 +1,164 @@
+Ще ти дам условие на задача за домашна работа на ученици от 11 клас, по Информатика, както и ще копирам кода, който са прикачили. Моля да напишеш обратна връзка, дали задачата е решена правилно, както и обща рецензия. Следвай указанията от учебната програма по информатика за 11 клас.
+Задача:
+Управление на училищна библиотека
+Създайте програма, която да помага на училищния библиотекар да управлява списък с книги. Програмата трябва да може да:
+
+Добавя нова книга (заглавие и автор)
+Извежда всички налични книги
+Търси книга по заглавие
+Премахва книга от списъка
+Насоки за изпълнение:
+
+Създайте клас Book с две свойства: Title (string) и Author (string)
+Използвайте List<Book> за съхранение на книгите
+Създайте меню с 4 опции, съответстващи на горните операции
+Имплементирайте всяка от операциите като отделен метод
+Решение на ученик:
+/*
+ * Created by SharpDevelop.
+ * User: User
+ * Date: 19.5.2025 г.
+ * Time: 12:40
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LibraryManager
+{
+    // Клас за представяне на книга
+    class Book
+    {
+        public string Title { get; set; }
+        public string Author { get; set; }
+
+        public Book(string title, string author)
+        {
+            Title = title;
+            Author = author;
+        }
+
+        public override string ToString()
+        {
+            return "Заглавие: " + Title + ", Автор: " + Author;
+        }
+    }
+
+    class Program
+    {
+        static List<Book> books = new List<Book>();
+
+        static void Main(string[] args)
+        {
+            bool running = true;
+
+            while (running)
+            {
+                Console.WriteLine("\n--- Меню ---");
+                Console.WriteLine("1. Добави нова книга");
+                Console.WriteLine("2. Покажи всички книги");
+                Console.WriteLine("3. Търси книга по заглавие");
+                Console.WriteLine("4. Премахни книга");
+                Console.WriteLine("5. Изход");
+                Console.Write("Изберете опция (1-5): ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        AddBook();
+                        break;
+                    case "2":
+                        ShowBooks();
+                        break;
+                    case "3":
+                        SearchBook();
+                        break;
+                    case "4":
+                        RemoveBook();
+                        break;
+                    case "5":
+                        running = false;
+                        break;
+                    default:
+                        Console.WriteLine("Невалидна опция. Опитайте отново.");
+                        break;
+                }
+            }
+
+            Console.WriteLine("Програмата приключи.");
+        }
+
+        // Метод за добавяне на нова книга
+        static void AddBook()
+        {
+            Console.Write("Въведете заглавие на книгата: ");
+            string title = Console.ReadLine();
+            Console.Write("Въведете автор на книгата: ");
+            string author = Console.ReadLine();
+
+            books.Add(new Book(title, author));
+            Console.WriteLine("Книгата е добавена успешно.");
+        }
+
+        // Метод за показване на всички книги
+        static void ShowBooks()
+        {
+            if (books.Count == 0)
+            {
+                Console.WriteLine("Няма налични книги.");
+                return;
+            }
+
+            Console.WriteLine("\n--- Списък с книги ---");
+            foreach (Book book in books)
+            {
+                Console.WriteLine(book);
+            }
+        }
+
+        // Метод за търсене на книга по заглавие
+        static void SearchBook()
+        {
+            Console.Write("Въведете заглавие за търсене: ");
+            string title = Console.ReadLine();
+
+            var foundBooks = books.Where(b => b.Title.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+            if (foundBooks.Count == 0)
+            {
+                Console.WriteLine("Няма намерени книги със зададеното заглавие.");
+            }
+            else
+            {
+                Console.WriteLine("Намерени книги:");
+                foreach (Book book in foundBooks)
+                {
+                    Console.WriteLine(book);
+                }
+            }
+        }
+
+        // Метод за премахване на книга
+        static void RemoveBook()
+        {
+            Console.Write("Въведете заглавие на книгата за премахване: ");
+            string title = Console.ReadLine();
+
+            var bookToRemove = books.FirstOrDefault(b => b.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
+
+            if (bookToRemove != null)
+            {
+                books.Remove(bookToRemove);
+                Console.WriteLine("Книгата е премахната успешно.");
+            }
+            else
+            {
+                Console.WriteLine("Книгата не беше намерена.");
+            }
+        }
+    }
+}
